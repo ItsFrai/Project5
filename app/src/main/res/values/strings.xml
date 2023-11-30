@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Project5_SM</string>
+    <string name="button_build_your_own">Build Your Own</string>
+    <string name="addToppingButton">Add</string>
+    <string name="backButton">Back</string>
+    <string name="pizza_size">Pizza Size</string>
+    <string name="additional_toppings">Additional Toppings</string>
+    <string name="tomato_sauce">Tomato Sauce</string>
+    <string name="alfredo_sauce">Alfredo Sauce</string>
+    <string name="amountTextFieldLabel">Enter your amount</string>
+    <string name="extra_cheese">Extra Cheese</string>
+    <string name="extra_sauce">Extra Sauce</string>
+    <string name="Add_to_Order">Add to Order</string>
+    <string name="price">Price $</string>
+    <string name="TODO">TODO</string>
+    <string name="remove"><![CDATA[<< Remove]]></string>
+    <string name="specialtypizza">SpecialtyPizza</string>
 </resources>

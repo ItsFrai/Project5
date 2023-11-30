@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/backButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="BackButton"/>
+
+    <TextView
+        android:id="@+id/sizeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pizza_size"
+        android:layout_below="@id/backButton"
+        android:layout_marginTop="16dp"/>
+
+    <Spinner
+        android:id="@+id/sizeDropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sizeLabel"
+        android:layout_marginTop="8dp"
+        android:minHeight="48dp" />
+
+    <RadioGroup
+        android:id="@+id/twoSauceRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sizeDropdown"
+        android:layout_marginTop="16dp">
+
+        <RadioButton
+            android:id="@+id/tomatoSauceRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tomato_sauce"/>
+
+        <RadioButton
+            android:id="@+id/alfredoSauceRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alfredo_sauce"/>
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/checkboxContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/twoSauceRadioGroup"
+        android:layout_marginTop="16dp">
+
+        <CheckBox
+            android:id="@+id/extraSauceCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/extra_sauce"/>
+
+        <CheckBox
+            android:id="@+id/extraCheeseCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/extra_cheese"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pizzaImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@id/checkboxContainer"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/TODO" />
+
+    <TextView
+        android:id="@+id/additionalToppingsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/additional_toppings"
+        android:layout_below="@id/pizzaImage"
+        android:layout_marginTop="8dp"/>
+
+    <ListView
+        android:id="@+id/additionalToppingsListView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@id/additionalToppingsLabel"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/addToppingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/additionalToppingsListView"
+        android:layout_marginTop="-175dp"
+        android:onClick="handleAddTopping"
+        android:text="@string/addToppingButton" />
+
+    <Button
+        android:id="@+id/removeToppingButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addToppingButton"
+        android:layout_marginTop="8dp"
+        android:onClick="handleRemoveTopping"
+        android:text="@string/remove" />
+
+    <ListView
+        android:id="@+id/selectedToppingsListView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@id/removeToppingButton"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/priceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/price"
+        android:layout_below="@id/selectedToppingsListView"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/amountTextField"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/priceLabel"
+        android:layout_marginTop="4dp"
+        android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/placeOrderButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Add_to_Order"
+        android:layout_below="@id/amountTextField"
+        android:layout_marginTop="8dp"
+        android:onClick="handlePlaceOrder"/>
+</RelativeLayout>

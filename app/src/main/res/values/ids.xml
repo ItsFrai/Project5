@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="sizeDropdown" type="id" />
+    <item name="pizzaImage" type="id" />
+    <item name="twoSauceRadioGroup" type="id" />
+    <item name="extraSauceCheckbox" type="id" />
+    <item name="extraCheeseCheckbox" type="id" />
+    <item name="additionalToppingsListView" type="id" />
+    <item name="addToppingButton" type="id" />
+    <item name="removeToppingButton" type="id" />
+    <item name="selectedToppingsListView" type="id" />
+    <item name="amountTextField" type="id" />
+    <item name="priceLabel" type="id" />
+    <item name="placeOrderButton" type="id" />
+</resources>

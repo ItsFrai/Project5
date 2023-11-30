@@ -21,6 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BuildYourOwnActivity">
+        </activity>
+        <activity android:name=".SpecialtyPizza">
+        </activity>
+
     </application>
 
 </manifest>
