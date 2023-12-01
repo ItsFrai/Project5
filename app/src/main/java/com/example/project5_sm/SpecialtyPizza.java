@@ -9,27 +9,40 @@ import java.util.ArrayList;
 
 public class SpecialtyPizza extends AppCompatActivity {
 
+    private RecyclerView recyclerView;
+    private ItemsAdapter pizzaAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.specialtypizza);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        // Find the RecyclerView in your layout
+        recyclerView = findViewById(R.id.recyclerView);
 
-        ArrayList<Item> items = new ArrayList<>();
+        // Initialize and set the adapter
+        pizzaAdapter = new ItemsAdapter(this, initializeListOfPizzas());
+        recyclerView.setAdapter(pizzaAdapter);
 
-        Deluxe deluxe = new Deluxe();
-        items.add(new Item(deluxe.pizzaType(), R.drawable.deluxe, deluxe.toppings.toString(), deluxe.sauce.toString()));
-        Meatzza meatzza = new Meatzza();
-        items.add(new Item(meatzza.pizzaType(), R.drawable.meatzza, meatzza.toppings.toString(), meatzza.sauce.toString()));
-        Pepperoni pepperoni = new Pepperoni();
-        items.add(new Item(pepperoni.pizzaType(), R.drawable.pepperoni, pepperoni.toppings.toString(), pepperoni.sauce.toString()));
-        Seafood seafood = new Seafood();
-        items.add(new Item(seafood.pizzaType(), R.drawable.seafood, seafood.toppings.toString(), seafood.sauce.toString()));
-        Supreme supreme = new Supreme();
-        items.add(new Item(supreme.pizzaType(), R.drawable.supreme, supreme.toppings.toString(), supreme.sauce.toString()));
-
+        // Set the layout manager (could be LinearLayoutManager, GridLayoutManager, etc.)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ItemsAdapter(getApplicationContext(), items));
+
+        // Optionally, you can add item decorations or set other properties for the RecyclerView
+    }
+
+    // This method initializes your list of pizzas with data
+    private ArrayList<Item> initializeListOfPizzas() {
+        ArrayList<Item> listOfPizzas = new ArrayList<>();
+
+        // Add TypeofPizza objects for the specialty pizzas
+        listOfPizzas.add(new Item("Deluxe", R.drawable.deluxe, "Toppings 1", "Sauce 1"));
+        listOfPizzas.add(new Item("Meatzza", R.drawable.meatzza, "Toppings 2", "Sauce 2"));
+        listOfPizzas.add(new Item("Pepperoni", R.drawable.pepperoni, "Toppings 3", "Sauce 3"));
+        listOfPizzas.add(new Item("Seafood", R.drawable.seafood, "Toppings 4", "Sauce 4"));
+        listOfPizzas.add(new Item("Supreme", R.drawable.supreme, "Toppings 5", "Sauce 5"));
+
+        // Add more pizzas as needed
+
+        return listOfPizzas;
     }
 }

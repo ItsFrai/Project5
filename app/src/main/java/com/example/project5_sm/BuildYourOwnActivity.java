@@ -1,17 +1,14 @@
 package com.example.project5_sm;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,9 +19,13 @@ import java.util.List;
 
 public class BuildYourOwnActivity extends AppCompatActivity {
 
+    private MainActivity mainMenuController;
     private Spinner sizeDropdown;
     private ListView additionalToppingsListView;
     private ListView selectedToppingsListView;
+    private CheckBox extraSauceCheckbox;
+    private CheckBox extraCheeseCheckbox;
+    private EditText amountTextField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +33,17 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         setContentView(R.layout.buildyourown);
 
         sizeDropdown = findViewById(R.id.sizeDropdown);
-        ImageView pizzaImage = findViewById(R.id.pizzaImage);
-        CheckBox extraSauceCheckbox = findViewById(R.id.extraSauceCheckbox);
-        CheckBox extraCheeseCheckbox = findViewById(R.id.extraCheeseCheckbox);
+        extraSauceCheckbox = findViewById(R.id.extraSauceCheckbox);
+        extraCheeseCheckbox = findViewById(R.id.extraCheeseCheckbox);
         additionalToppingsListView = findViewById(R.id.additionalToppingsListView);
-        Button addToppingButton = findViewById(R.id.addToppingButton);
-        Button removeToppingButton = findViewById(R.id.removeToppingButton);
         selectedToppingsListView = findViewById(R.id.selectedToppingsListView);
-        EditText amountTextField = findViewById(R.id.amountTextField);
+        amountTextField = findViewById(R.id.amountTextField);
 
-        // Set default values and load pizza image
+        Button addToOrderButton = findViewById(R.id.addToOrderButton);
+        addToOrderButton.setOnClickListener(this::handlePlaceOrder);
+
         initialize();
 
-        // Set event listeners
         sizeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -56,19 +55,28 @@ public class BuildYourOwnActivity extends AppCompatActivity {
                 // Do nothing here
             }
         });
+        additionalToppingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                handleTransferTopping(additionalToppingsListView, selectedToppingsListView, position);
+            }
+        });
+
+        selectedToppingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                handleTransferTopping(selectedToppingsListView, additionalToppingsListView, position);
+            }
+        });
 
         extraSauceCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> updatePizzaPrice());
 
         extraCheeseCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> updatePizzaPrice());
 
-        // Add listeners for the topping buttons
-        addToppingButton.setOnClickListener(this::handleAddTopping);
-
-        removeToppingButton.setOnClickListener(this::handleRemoveTopping);
     }
 
     private void initialize() {
-        // Set default size value
+
         List<String> sizeOptions = new ArrayList<>();
         sizeOptions.add("Small");
         sizeOptions.add("Medium");
@@ -77,75 +85,140 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         ArrayAdapter<String> sizeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sizeOptions);
         sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sizeDropdown.setAdapter(sizeAdapter);
+        sizeDropdown.setSelection(sizeAdapter.getPosition("Small"));
 
-        // Set default pizza image
 
-        // Set additional toppings
         List<String> additionalToppings = new ArrayList<>();
-        additionalToppings.add("Sausage");
+
+
         additionalToppings.add("Chicken");
-        // Add other toppings...
+        additionalToppings.add("Beef");
+        additionalToppings.add("Ham");
+        additionalToppings.add("Pepperoni");
+        additionalToppings.add("Shrimp");
+        additionalToppings.add("Squid");
+        additionalToppings.add("CrabMeats");
+        additionalToppings.add("GreenPepper");
+        additionalToppings.add("Onion");
+        additionalToppings.add("Mushroom");
+        additionalToppings.add("Pineapple");
+        additionalToppings.add("BlackOlives");
 
         ArrayAdapter<String> toppingsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, additionalToppings);
         additionalToppingsListView.setAdapter(toppingsAdapter);
+
+        ArrayAdapter<String> selectedToppingsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
+        selectedToppingsListView.setAdapter(selectedToppingsAdapter);
     }
+
 
     private void updatePizzaPrice() {
-        // Implement the logic to update the pizza price based on the selected options
-        // ...
+        ArrayAdapter<String> selectedToppingsAdapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
 
-        // Update the amountTextField
-        // amountTextField.setText(String.format("%.2f", totalPrice));
-    }
+        // Check if the adapter is not null
+        if (selectedToppingsAdapter != null) {
+            int selectedToppingsCount = selectedToppingsAdapter.getCount();
 
-    public void handleAddTopping(View view) {
-        String selectedTopping = (String) additionalToppingsListView.getSelectedItem();
+            double additionalToppingsCost = Math.max(selectedToppingsCount - 3, 0) * 1.49;
+            double sizeCost = calculateSizeCost();
+            double sauceCost = (extraSauceCheckbox.isChecked()) ? 1.0 : 0.0;
+            double cheeseCost = (extraCheeseCheckbox.isChecked()) ? 1.0 : 0.0;
+            double totalPrice = additionalToppingsCost + sizeCost + sauceCost + cheeseCost;
 
-        // Check if a topping is selected and the limit is not exceeded
-        if (selectedTopping != null && selectedToppingsListView.getCount() <= 6) {
-            // Add the selected topping to the selectedToppingsListView
-            ListAdapter selectedToppingsListAdapter = selectedToppingsListView.getAdapter();
-            if (selectedToppingsListAdapter instanceof ArrayAdapter) {
-                ArrayAdapter<String> selectedToppingsAdapter = (ArrayAdapter<String>) selectedToppingsListAdapter;
-                selectedToppingsAdapter.add(selectedTopping);
-            }
-            // Remove the selected topping from the additionalToppingsListView
-            ListAdapter additionalToppingsListAdapter = additionalToppingsListView.getAdapter();
-            if (additionalToppingsListAdapter instanceof ArrayAdapter) {
-                ArrayAdapter<String> additionalToppingsAdapter = (ArrayAdapter<String>) additionalToppingsListAdapter;
-                additionalToppingsAdapter.remove(selectedTopping);
-            }
-
-            // Update the pizza price
-            updatePizzaPrice();
-        } else {
-            Toast.makeText(this, "Maximum 7 toppings allowed.", Toast.LENGTH_SHORT).show();
+            amountTextField.setText(String.format("%.2f", totalPrice));
         }
     }
 
+    private void handleTransferTopping(ListView sourceListView, ListView destinationListView, int position) {
+        ArrayAdapter<String> sourceAdapter = (ArrayAdapter<String>) sourceListView.getAdapter();
+        ArrayAdapter<String> destinationAdapter = (ArrayAdapter<String>) destinationListView.getAdapter();
+        String selectedTopping = sourceAdapter.getItem(position);
+        destinationAdapter.add(selectedTopping);
+        sourceAdapter.remove(selectedTopping);
+        updatePizzaPrice();
+    }
+    private double calculateSizeCost() {
+        if (sizeDropdown.getSelectedItem() != null) {
+            String selectedSize = sizeDropdown.getSelectedItem().toString();
+            switch (selectedSize) {
+                case "Medium":
+                    return 10.99;
+                case "Large":
+                    return 12.99;
+                default:
+                    return 8.99;
+            }
+        }
+        return 0;
+    }
 
-    public void handleRemoveTopping(View view) {
-        // Get the selected topping from the selectedToppingsListView
-        String selectedTopping = (String) selectedToppingsListView.getSelectedItem();
+    private void reset() {
+        sizeDropdown.setSelection(0);
+        extraCheeseCheckbox.setChecked(false);
+        extraSauceCheckbox.setChecked(false);
+        amountTextField.setText(null);
 
-        // Check if a topping is selected
-        if (selectedTopping != null) {
-            // Add the selected topping back to the additionalToppingsListView
-            ArrayAdapter<String> additionalToppingsAdapter = (ArrayAdapter<String>) additionalToppingsListView.getAdapter();
-            additionalToppingsAdapter.add(selectedTopping);
+        // Clear toppings lists
+        clearListView(selectedToppingsListView);
+        clearListView(additionalToppingsListView);
 
-            // Remove the selected topping from the selectedToppingsListView
-            ArrayAdapter<String> selectedToppingsAdapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
-            selectedToppingsAdapter.remove(selectedTopping);
+        // Set default additional toppings
+        List<String> defaultToppings = new ArrayList<>();
+        defaultToppings.add("Sausage");
+        defaultToppings.add("Chicken");
+        defaultToppings.add("Beef");
+        defaultToppings.add("Ham");
+        defaultToppings.add("Pepperoni");
+        defaultToppings.add("Shrimp");
+        defaultToppings.add("Squid");
+        defaultToppings.add("CrabMeats");
+        defaultToppings.add("GreenPepper");
+        defaultToppings.add("Onion");
+        defaultToppings.add("Mushroom");
+        defaultToppings.add("Pineapple");
+        defaultToppings.add("BlackOlives");
 
-            // Update the pizza price
-            updatePizzaPrice();
-        } else {
-            // Show a Toast message if no topping is selected
-            Toast.makeText(this, "Minimum 3 toppings", Toast.LENGTH_SHORT).show();
+        ArrayAdapter<String> toppingsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, defaultToppings);
+        additionalToppingsListView.setAdapter(toppingsAdapter);
+    }
+    private void clearListView(ListView listView) {
+        ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
+        if (adapter != null) {
+            adapter.clear();
+            adapter.notifyDataSetChanged();
         }
     }
     public void handlePlaceOrder(View view) {
+
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            Log.d("Topping", "Topping " + i + ": " + adapter.getItem(i));
+        }
+
+        if (adapter.getCount() <= 2) {
+
+        Pizza pizza = PizzaMaker.createPizza("Build Your Own");
+        pizza.size = Size.valueOf(sizeDropdown.getSelectedItem().toString());
+        pizza.extraCheese = (extraCheeseCheckbox.isChecked());
+        pizza.extraSauce = (extraSauceCheckbox.isChecked());
+
+        List<String> selectedToppings = new ArrayList<>();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            selectedToppings.add(adapter.getItem(i));
+        }
+        pizza.toppings.addAll(selectedToppings);
+
+        StoreOrders orders = mainMenuController.getStores();
+        int currentOrderNumber = orders.nextAvailableNumber();
+
+        Order currentOrder = orders.find(currentOrderNumber);
+        currentOrder.addPizza(pizza);
+
         Toast.makeText(this, "Order Placed!", Toast.LENGTH_SHORT).show();
+
+        reset();
+    } else {
+            Toast.makeText(this, "Not Enough Toppings!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
