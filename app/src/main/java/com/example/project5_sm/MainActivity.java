@@ -26,14 +26,17 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
     public void specialitypizzabutton(View view) {
         Intent intent  = new Intent(this, SpecialtyPizza.class);
+        intent.putExtra("mainMenuController", this);
         startActivity(intent);
     }
     public void currentorderbutton(View view) {
-        Intent intent  = new Intent(this, CurrentOrder.class);
+        Intent intent  = new Intent(this, CurrentOrderActivity.class);
+        intent.putExtra("mainMenuController", this);
         startActivity(intent);
     }
     public void storeorderbutton(View view) {
         Intent intent  = new Intent(this, StoreOrdersControl.class);
+        intent.putExtra("mainMenuController", this);
         startActivity(intent);
     }
 
