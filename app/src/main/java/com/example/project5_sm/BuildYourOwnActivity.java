@@ -33,7 +33,6 @@ public class BuildYourOwnActivity extends AppCompatActivity {
 
         sizeDropdown = findViewById(R.id.sizeDropdown);
         ImageView pizzaImage = findViewById(R.id.pizzaImage);
-        RadioGroup twoSauceRadioGroup = findViewById(R.id.twoSauceRadioGroup);
         CheckBox extraSauceCheckbox = findViewById(R.id.extraSauceCheckbox);
         CheckBox extraCheeseCheckbox = findViewById(R.id.extraCheeseCheckbox);
         additionalToppingsListView = findViewById(R.id.additionalToppingsListView);
@@ -58,8 +57,6 @@ public class BuildYourOwnActivity extends AppCompatActivity {
             }
         });
 
-        twoSauceRadioGroup.setOnCheckedChangeListener((group, checkedId) -> updatePizzaPrice());
-
         extraSauceCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> updatePizzaPrice());
 
         extraCheeseCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> updatePizzaPrice());
@@ -68,14 +65,6 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         addToppingButton.setOnClickListener(this::handleAddTopping);
 
         removeToppingButton.setOnClickListener(this::handleRemoveTopping);
-    }
-
-    public void BackButton(View view) {
-        // Create an Intent to navigate back to the main menu or another activity
-        Intent intent = new Intent(this, MainActivity.class); // Replace MainActivity with the desired activity
-
-        // Start the activity
-        startActivity(intent);
     }
 
     private void initialize() {
@@ -157,8 +146,6 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         }
     }
     public void handlePlaceOrder(View view) {
-        // Implement the logic to handle placing the order
-        // For example, you can show a confirmation message or navigate to a new activity
         Toast.makeText(this, "Order Placed!", Toast.LENGTH_SHORT).show();
     }
 }

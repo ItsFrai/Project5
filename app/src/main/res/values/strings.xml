@@ -15,4 +15,8 @@
     <string name="TODO">TODO</string>
     <string name="remove"><![CDATA[<< Remove]]></string>
     <string name="specialtypizza">SpecialtyPizza</string>
+    <string name="current_order">Current order</string>
+    <string name="store_orders">Store orders</string>
+    <string name="select_pizza">selectpizzatype</string>
+    <string name="todo">TODO</string>
 </resources>

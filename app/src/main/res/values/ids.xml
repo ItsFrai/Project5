@@ -2,7 +2,6 @@
 <resources>
     <item name="sizeDropdown" type="id" />
     <item name="pizzaImage" type="id" />
-    <item name="twoSauceRadioGroup" type="id" />
     <item name="extraSauceCheckbox" type="id" />
     <item name="extraCheeseCheckbox" type="id" />
     <item name="additionalToppingsListView" type="id" />
@@ -12,4 +11,5 @@
     <item name="amountTextField" type="id" />
     <item name="priceLabel" type="id" />
     <item name="placeOrderButton" type="id" />
+    <item name="addToOrderButton" type="id"></item>
 </resources>

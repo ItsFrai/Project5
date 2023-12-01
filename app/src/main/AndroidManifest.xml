@@ -25,6 +25,10 @@
         </activity>
         <activity android:name=".SpecialtyPizza">
         </activity>
+        <activity android:name=".CurrentOrder">
+        </activity>
+        <activity android:name=".StoreOrdersControl">
+        </activity>
 
     </application>
 
