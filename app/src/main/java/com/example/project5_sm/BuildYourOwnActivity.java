@@ -1,5 +1,6 @@
 package com.example.project5_sm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,12 +33,16 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buildyourown);
 
+        Intent intent = getIntent();
+        mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
+
         sizeDropdown = findViewById(R.id.sizeDropdown);
         extraSauceCheckbox = findViewById(R.id.extraSauceCheckbox);
         extraCheeseCheckbox = findViewById(R.id.extraCheeseCheckbox);
         additionalToppingsListView = findViewById(R.id.additionalToppingsListView);
         selectedToppingsListView = findViewById(R.id.selectedToppingsListView);
         amountTextField = findViewById(R.id.amountTextField);
+
 
         Button addToOrderButton = findViewById(R.id.addToOrderButton);
         addToOrderButton.setOnClickListener(this::handlePlaceOrder);
@@ -190,12 +195,14 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     }
     public void handlePlaceOrder(View view) {
 
-        ArrayAdapter<String> adapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
-        for (int i = 0; i < adapter.getCount(); i++) {
-            Log.d("Topping", "Topping " + i + ": " + adapter.getItem(i));
+        if (mainMenuController == null) {
+            Log.e("BuildYourOwnActivity", "mainMenuController is null");
+            return;
         }
 
-        if (adapter.getCount() <= 2) {
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
+
+        if (adapter.getCount() > 2) {
 
         Pizza pizza = PizzaMaker.createPizza("Build Your Own");
         pizza.size = Size.valueOf(sizeDropdown.getSelectedItem().toString());

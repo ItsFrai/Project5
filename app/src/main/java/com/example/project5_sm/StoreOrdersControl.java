@@ -3,7 +3,9 @@ package com.example.project5_sm;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class StoreOrdersControl extends AppCompatActivity {
+import java.io.Serializable;
+
+public class StoreOrdersControl extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

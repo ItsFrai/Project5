@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements Serializable {
     private static final StoreOrders orders = new StoreOrders();
     private static final ArrayList<Integer> placed_orders = new ArrayList<>();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void buildyourrownclickbutton(View view) {
         Intent intent = new Intent(this, BuildYourOwnActivity.class);
+        intent.putExtra("mainMenuController", this);
         startActivity(intent);
     }
     public void specialitypizzabutton(View view) {
