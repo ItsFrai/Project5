@@ -60,19 +60,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
                 // Do nothing here
             }
         });
-        additionalToppingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                handleTransferTopping(additionalToppingsListView, selectedToppingsListView, position);
-            }
-        });
+        additionalToppingsListView.setOnItemClickListener((parent, view, position, id) -> handleTransferTopping(additionalToppingsListView, selectedToppingsListView, position));
 
-        selectedToppingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                handleTransferTopping(selectedToppingsListView, additionalToppingsListView, position);
-            }
-        });
+        selectedToppingsListView.setOnItemClickListener((parent, view, position, id) -> handleTransferTopping(selectedToppingsListView, additionalToppingsListView, position));
 
         extraSauceCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> updatePizzaPrice());
 

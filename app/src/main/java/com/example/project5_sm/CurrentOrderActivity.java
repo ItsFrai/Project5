@@ -3,6 +3,7 @@ package com.example.project5_sm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ public class CurrentOrderActivity extends AppCompatActivity {
     private TextView subtotalTextView;
     private TextView salesTaxTextView;
     private TextView orderTotalTextView;
+
+    private int selectedPizzaIndex = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,13 +81,19 @@ public class CurrentOrderActivity extends AppCompatActivity {
         ArrayList<String> pizzas = currentOrder.getPizzaStrings();
         ArrayAdapter<String> pizzaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, pizzas);
         currentOrdersListView.setAdapter(pizzaAdapter);
+        currentOrdersListView.setOnItemClickListener((adapterView, view, i, l) -> selectedPizzaIndex = i);
     }
-    public void handleRemovePizza(View view, int selectedIndex) {
+    public void handleRemovePizza(View view) {
         int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
         StoreOrders orders = mainMenuController.getStores();
         Order currentOrder = orders.find(currentOrderNum);
         try {
-            currentOrder.removePizza(selectedIndex);
+            if (selectedPizzaIndex != -1) {
+                currentOrder.removePizza(selectedPizzaIndex);
+                selectedPizzaIndex = -1;
+            } else {
+                Toast.makeText(this, "No pizza selected to remove", Toast.LENGTH_SHORT).show();
+            }
         } catch (IndexOutOfBoundsException e) {
             Toast.makeText(this, "No pizza to remove", Toast.LENGTH_SHORT).show();
             return;
