@@ -21,7 +21,12 @@ public class SpecialtyPizza extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
 
         // Initialize and set the adapter
-        pizzaAdapter = new ItemsAdapter(this, initializeListOfPizzas());
+        pizzaAdapter = new ItemsAdapter(this, initializeListOfPizzas(), new ItemsAdapter.ItemClickListener() {
+            @Override
+            public void onItemCLick(Item items) {
+                
+            }
+        });
         recyclerView.setAdapter(pizzaAdapter);
 
         // Set the layout manager (could be LinearLayoutManager, GridLayoutManager, etc.)

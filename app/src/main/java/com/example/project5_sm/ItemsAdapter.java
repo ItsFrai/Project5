@@ -17,11 +17,16 @@ import java.util.ArrayList;
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>{
     private Context context; //need the context to inflate the layout
     private ArrayList<Item> items; //need the data binding to each row of RecyclerView
+    private ItemClickListener mItemListner;
 
-    public ItemsAdapter(Context context, ArrayList<Item> items) {
+    public ItemsAdapter(Context context, ArrayList<Item> items, ItemClickListener itemClickListener) {
         this.context = context;
         this.items = items;
+        this.mItemListner= itemClickListener;
     }
+
+
+
 
     /**
      * This method will inflate the row layout for the items in the RecyclerView
@@ -52,6 +57,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         holder.toppings.setText(items.get(position).getToppings());
         holder.sauce.setText(items.get(position).getSauce());
         holder.imageView.setImageResource(items.get(position).getImage());
+
+        holder.itemView.setOnClickListener(view -> {
+            mItemListner.onItemCLick(items.get(position));
+        });
+
+
     }
 
     /**
@@ -61,6 +72,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
     @Override
     public int getItemCount() {
         return items.size(); //number of MenuItem in the array list.
+    }
+    public interface ItemClickListener{
+        void onItemCLick(Item items);
     }
 
     /**
@@ -80,5 +94,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
             //parentLayout = itemView.findViewById(R.id.rowView);
         }
     }
+
 
 }
