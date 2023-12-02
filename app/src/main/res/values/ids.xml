@@ -12,4 +12,8 @@
     <item name="priceLabel" type="id" />
     <item name="placeOrderButton" type="id" />
     <item name="addToOrderButton" type="id"></item>
+    <item name="orderNumberTextView" type="id"></item>
+    <item name="choiceBox" type="id"></item>
+    <item name="totalTx" type="id"></item>
+    <item name="orderList" type="id"></item>
 </resources>

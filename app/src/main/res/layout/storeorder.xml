@@ -22,11 +22,11 @@
         android:id="@+id/orderNumberLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Order Number"
+        android:text="@string/order_number"
         android:layout_marginTop="16dp"/>
 
-    <EditText
-        android:id="@+id/orderNumberTextField"
+    <Spinner
+        android:id="@+id/choiceBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -55,7 +55,7 @@
 
         <EditText
             android:id="@+id/orderTotalTextField"
-            android:layout_width="match_parent"
+            android:layout_width="161dp"
             android:layout_height="wrap_content"
             android:hint="@string/order_total"
             android:minHeight="48dp" />
@@ -68,15 +68,7 @@
         android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:onClick="handleRemovePizza"
-        android:text="@string/remove" />
+        android:onClick="cancelOrder"
+        android:text="@string/cancel" />
 
-    <Button
-        android:id="@+id/placeOrderButton"
-        android:layout_width="124dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:onClick="handlePlaceOrder"
-        android:text="@string/place_order" />
 </LinearLayout>

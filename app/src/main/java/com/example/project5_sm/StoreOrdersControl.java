@@ -1,106 +1,152 @@
 package com.example.project5_sm;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Spinner;
 
-import java.io.Serializable;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class StoreOrdersControl extends AppCompatActivity{
-    private MainActivity mainMenuController;
+public class StoreOrdersControl extends AppCompatActivity {
 
-    private TextView orderNumberTextView;
-    private ListView StoreOrdersListView;
-    private TextView orderTotalTextView;
+    private StoreOrders sOrder;
+    private MainActivity mainController;
+
+    private ListView orderListView;
+    private EditText totalEditText;
+    private Spinner orderNumberSpinner;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.storeorder);
-        orderNumberTextView = findViewById(R.id.orderNumberTextField);
-        StoreOrdersListView = findViewById(R.id.StoreOrdersListView);
-        orderTotalTextView = findViewById(R.id.orderTotalTextField);
 
-        Intent intent = getIntent();
-        mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
+        orderListView = findViewById(R.id.StoreOrdersListView);
+        totalEditText = findViewById(R.id.orderTotalTextField);
+        orderNumberSpinner = findViewById(R.id.choiceBox);
 
-        // Set up UI
-        setOrderNumber();
-        initializePizza();
-        initializePrice();
+        mainController = new MainActivity().get_control();
+        sOrder = mainController.getStores();
+
+        if (sOrder.numOrders() - 1 == 0) {
+            showAlert("No Pizza", "Nothing available");
+            return;
+        }
+
+        ArrayList<Integer> currentNumbers = sOrder.getOrderNumbers();
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currentNumbers);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orderNumberSpinner.setAdapter(adapter);
+
+        orderNumberSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                showPizza();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                totalEditText.setText("");
+                orderListView.setAdapter(null);
+            }
+        });
     }
 
-    private void setOrderNumber() {
-        private void setOrderNumber() {
-            String orderNumber = String.valueOf(mainMenuController.getStores().nextAvailableNumber());
-            orderNumberTextView.setText(orderNumber);
+    private void setPrice() {
+        int orderNum = (int) orderNumberSpinner.getSelectedItem();
+        double taxes = 0.06625;
+        double subtotal = sOrder.find(orderNum).totalCost();
+        double total = (subtotal * taxes) + subtotal;
+        String totalString = new DecimalFormat("#,##0.00").format(total);
+        totalEditText.setText(totalString);
+    }
+
+    private void showPizza() {
+        if (orderNumberSpinner.getSelectedItem() == null) {
+            totalEditText.setText("");
+            orderListView.setAdapter(null);
+            return;
         }
 
-        private void initializePrice() {
-            int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
-            StoreOrders orders = mainMenuController.getStores();
-            Order currentOrder = orders.find(currentOrderNum);
+        Order selectedOrder = sOrder.find((int) orderNumberSpinner.getSelectedItem());
+        ArrayList<String> pizzas = selectedOrder.getPizzaStrings();
+        ArrayAdapter<String> pizzaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, pizzas);
+        orderListView.setAdapter(pizzaAdapter);
 
-            double subtotalDouble = currentOrder.totalCost();
-            String subtotalString = new DecimalFormat("#,##0.00").format(subtotalDouble);
+        setPrice();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setMainMenuController(mainController);
+    }
 
-            double tax = subtotalDouble * 0.06625;
-            String taxString = new DecimalFormat("#,##0.00").format(tax);
+    private void setMainMenuController(MainActivity controller) {
+        mainController = controller;
+    }
 
+    private void showAlert(String title, String content) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title)
+                .setMessage(content)
+                .setPositiveButton("OK", null)
+                .show();
+    }
 
-            double total = subtotalDouble + tax;
-            String totalString = new DecimalFormat("#,##0.00").format(total);
-            StoreorderTotalTextView.setText(totalString);
+    public void cancelOrder(View view) {
+        if (orderNumberSpinner.getSelectedItem() == null) {
+            showAlert("Null", "Nothing selected");
+            return;
         }
 
-        private void initializePizza() {
-            int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
-            StoreOrders orders = mainMenuController.getStores();
-            Order currentOrder = orders.find(currentOrderNum);
+        ArrayList<Integer> ordersPlaced = mainController.get_control().get_placed();
+        int number = (int) orderNumberSpinner.getSelectedItem();
 
-            ArrayList<String> pizzas = currentOrder.getPizzaStrings();
-            ArrayAdapter<String> pizzaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, pizzas);
-            StoreOrdersListView.setAdapter(pizzaAdapter);
+        if (!contains(ordersPlaced, number)) {
+            showAlert("Cancel", "Nothing placed");
+            return;
         }
-        public void handleRemovePizza(View view, int selectedIndex) {
-            int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
-            StoreOrders orders = mainMenuController.getStores();
-            Order currentOrder = orders.find(currentOrderNum);
-            try {
-                currentOrder.removePizza(selectedIndex);
-            } catch (IndexOutOfBoundsException e) {
-                Toast.makeText(this, "No pizza to remove", Toast.LENGTH_SHORT).show();
-                return;
+
+        sOrder = mainController.getStores();
+        ArrayList<String> pizzaList = sOrder.find(number).getPizzaStrings();
+        if (pizzaList.isEmpty()) {
+            showAlert("Order", "Nothing in order");
+            return;
+        }
+
+        removeOrder(number);
+        ArrayAdapter<Integer> adapter = (ArrayAdapter<Integer>) orderNumberSpinner.getAdapter();
+        adapter.remove(number);
+        showAlert("Cancel Success!", "Cancelled!");
+
+        if (!adapter.isEmpty()) {
+            orderNumberSpinner.setSelection(0);
+        } else {
+            totalEditText.getText().clear();
+            orderListView.setAdapter(null);
+        }
+    }
+
+    private boolean contains(ArrayList<Integer> list, int orderNumber) {
+        for (Integer integer : list) {
+            if (Objects.equals(integer, orderNumber)) {
+                return true;
             }
-            initializePizza();
-            initializePrice();
         }
-        public void handlePlaceOrder(View view) {
-            int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
-            StoreOrders orders = mainMenuController.getStores();
-
-            ArrayList<String> pizzaList = orders.find(currentOrderNum).getPizzaStrings();
-            if (pizzaList.isEmpty()) {
-                Toast.makeText(this, "No  pizzas to place", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            orders.addOrder(orders.find(currentOrderNum));
-            mainMenuController.get_placed().add(currentOrderNum);
-
-            initializePizza();
-            initializePrice();
-            setOrderNumber();
-            Toast.makeText(this, "Order Placed", Toast.LENGTH_SHORT).show();
-        }
+        return false;
+    }
+    private void removeOrder(int orderNumber) {
+        ArrayList<Integer> ordersPlaced = mainController.get_control().get_placed();
+        ordersPlaced.removeIf(i -> i.equals(orderNumber));
     }
 }
