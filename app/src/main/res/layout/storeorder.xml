@@ -35,7 +35,7 @@
         android:text="0" />
 
     <ListView
-        android:id="@+id/currentOrdersListView"
+        android:id="@+id/StoreOrdersListView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="16dp" />
