@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Intent;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,8 @@ public class SpecialtyPizza extends AppCompatActivity {
         pizzaAdapter = new ItemsAdapter(this, initializeListOfPizzas(), new ItemsAdapter.ItemClickListener() {
             @Override
             public void onItemCLick(Item items) {
-                
+            showToast(items.getPizzaName() +"clicked");
+                //openRecycleViewer();
             }
         });
         recyclerView.setAdapter(pizzaAdapter);
@@ -33,6 +36,15 @@ public class SpecialtyPizza extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Optionally, you can add item decorations or set other properties for the RecyclerView
+    }
+
+    public void openRecycleViewer(){
+        Intent intent = new Intent(this, selectedItemActivity.class);
+        startActivity(intent);
+
+    }
+    private void showToast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     // This method initializes your list of pizzas with data

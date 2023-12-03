@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/rowView"
+    android:layout_marginTop="10dp">
+    <ImageView
+        android:layout_width="192dp"
+        android:layout_height="96dp"
+        android:layout_marginEnd="10dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/imageView"
+        android:contentDescription="@string/TODO"/>
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pizzaName"
+        android:layout_toEndOf="@+id/imageView"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        tools:text="pizzaName"/>
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toppings"
+        android:layout_toEndOf="@+id/imageView"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:layout_marginTop="30dp"
+        tools:text="Toppings: "/>
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sauce"
+        android:layout_toEndOf="@+id/imageView"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:layout_marginTop="90dp"
+        tools:text="Sauce: "/>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="10dp"
+        android:background="#DAD8D8"/>
+</RelativeLayout>
