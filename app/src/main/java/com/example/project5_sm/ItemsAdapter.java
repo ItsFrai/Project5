@@ -17,16 +17,11 @@ import java.util.ArrayList;
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>{
     private Context context; //need the context to inflate the layout
     private ArrayList<Item> items; //need the data binding to each row of RecyclerView
-    private ItemClickListener mItemListner;
 
-    public ItemsAdapter(Context context, ArrayList<Item> items, ItemClickListener itemClickListener) {
+    public ItemsAdapter(Context context, ArrayList<Item> items) {
         this.context = context;
         this.items = items;
-        this.mItemListner= itemClickListener;
     }
-
-
-
 
     /**
      * This method will inflate the row layout for the items in the RecyclerView
@@ -57,12 +52,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         holder.toppings.setText(items.get(position).getToppings());
         holder.sauce.setText(items.get(position).getSauce());
         holder.imageView.setImageResource(items.get(position).getImage());
-
-        holder.itemView.setOnClickListener(view -> {
-            mItemListner.onItemCLick(items.get(position));
-        });
-
-
     }
 
     /**
@@ -73,9 +62,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
     public int getItemCount() {
         return items.size(); //number of MenuItem in the array list.
     }
-    public interface ItemClickListener{
-        void onItemCLick(Item items);
-    }
 
     /**
      * Get the views from the row layout file, similar to the onCreate() method.
@@ -83,7 +69,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
     public class ItemsHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private TextView pizzaName, toppings, sauce;
-        //private RelativeLayout parentLayout; //this is the row layout
+        private RelativeLayout parentLayout; //this is the row layout
 
         public ItemsHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,9 +77,21 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
             pizzaName = itemView.findViewById(R.id.pizzaName);
             toppings = itemView.findViewById(R.id.toppings);
             sauce = itemView.findViewById(R.id.sauce);
-            //parentLayout = itemView.findViewById(R.id.rowView);
+            parentLayout = itemView.findViewById(R.id.rowView);
+            parentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(itemView.getContext(), selectedItemActivity.class);
+                    int position = getAdapterPosition();
+                    intent.putExtra("Sauce", items.get(position).getSauce());
+                    intent.putExtra("PizzaName", items.get(position).getPizzaName());
+                    intent.putExtra("Toppings", items.get(position).getToppings());
+                    intent.putExtra("Image", items.get(position).getImage());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
-
 
 }

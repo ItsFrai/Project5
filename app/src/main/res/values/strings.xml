@@ -24,4 +24,5 @@
     <string name="place_order">Place Order</string>
     <string name="cancel">cancel</string>
     <string name="order_number">Order Number</string>
+    <string name="firstpizza">firstpizza</string>
 </resources>
