@@ -29,6 +29,24 @@ public class SpecialtyPizza extends AppCompatActivity {
         Supreme supreme = new Supreme();
         items.add(new Item(supreme.pizzaType(), R.drawable.supreme, supreme.toppings.toString(), supreme.sauce.toString()));
 
+        Dessert dessert = new Dessert();
+        items.add(new Item(dessert.pizzaType(), R.drawable.dessert, dessert.toppings.toString(), dessert.sauce.toString()));
+
+
+        Breakfast breakfast = new Breakfast();
+        items.add(new Item(breakfast.pizzaType(), R.drawable.breakfast, breakfast.toppings.toString(), breakfast.sauce.toString()));
+
+
+        Hawaiian hawaiian = new Hawaiian();
+        items.add(new Item(hawaiian.pizzaType(), R.drawable.hawaiian, hawaiian.toppings.toString(), hawaiian.sauce.toString()));
+
+        Veggie veggie = new Veggie();
+        items.add(new Item(veggie.pizzaType(), R.drawable.dessert, veggie.toppings.toString(), veggie.sauce.toString()));
+
+        BaconCheeseBurger baconCheeseBurger = new BaconCheeseBurger();
+        items.add(new Item(baconCheeseBurger.pizzaType(), R.drawable.baconcheeseburger, baconCheeseBurger.toppings.toString(), baconCheeseBurger.sauce.toString()));
+
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new ItemsAdapter(getApplicationContext(), items));
     }

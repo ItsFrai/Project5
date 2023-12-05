@@ -8,5 +8,8 @@ package com.example.project5_sm;
  */
 public enum Sauce {
         TOMATO,
-        ALFREDO
+        ALFREDO,
+
+        NUTELLA,
+        VODKA
 }
