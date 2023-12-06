@@ -62,8 +62,7 @@
         android:layout_toEndOf="@id/imageViewSelected"
         android:layout_marginTop="200dp"
         android:onClick="extraCheeseClick"
-        android:id="@+id/cheeseCheckBox"
-        tools:ignore="VisualLintButtonSize" />
+        android:id="@+id/cheeseCheckBox"/>
 
     <TextView android:layout_marginTop="200dp"
         android:textSize="20sp"
@@ -74,6 +73,10 @@
         android:layout_height="wrap_content"/>
 
     <Button android:text="@string/Add_to_Order"
+        android:id="@+id/specialtyAddOrderBtn"
+        android:onClick="specialtyPizzaButtonOrder"
         android:layout_marginTop="250dp"
         android:layout_width="200dp" android:layout_height="wrap_content"/>
+
+
 </RelativeLayout>

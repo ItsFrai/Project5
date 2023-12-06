@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class selectedItemActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private MainActivity mainMenuController;
     private TextView pizzaName, sauce, toppings, price;
     private ImageView image;
     private Spinner spinner;
@@ -26,6 +28,7 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         sauce = findViewById(R.id.sauceSelected);
         image = findViewById(R.id.imageViewSelected);
         Intent intent = getIntent();
+        mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
         pizzaName.setText(intent.getStringExtra("PizzaName"));
         toppings.setText(intent.getStringExtra("Toppings"));
         sauce.setText(intent.getStringExtra("Sauce"));
@@ -36,6 +39,8 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         String[] size = {"Small", "Medium", "Large"}; //could be a list from the backend
         adapter = new ArrayAdapter<>(
                 this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, size);
+
+
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this); //add the listener
 
@@ -104,5 +109,28 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         }
 
         price.setText(getPrice());
+    }
+
+    public void specialtyPizzaButtonOrder(View view) {
+
+        String msg = "Pizza Added to Order!";
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
+        StoreOrders storeOrders = StoreOrders.getStoreOrders();
+        ArrayList<Order> orders = storeOrders.storeList();
+        int orderNumber = storeOrders.nextAvailableNumber();
+        Order currentOrder = orders.get(orderNumber);
+        currentOrder.addPizza(pizza);
+
+        spinner.setSelection(0);
+        cheeseCheckBox.setChecked(false);
+        sauceCheckBox.setChecked(false);
+
+        Intent intent = getIntent();
+        String pizzaType = intent.getStringExtra("PizzaName");
+        pizza = PizzaMaker.createPizza(pizzaType);
+        CharSequence priceSeq = getPrice();
+        price.setText(priceSeq);
+
     }
 }

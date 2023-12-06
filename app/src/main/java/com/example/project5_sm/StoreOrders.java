@@ -10,17 +10,23 @@ import java.util.ArrayList;
  */
 public class StoreOrders {
 
-    private final ArrayList<Order> storeOrders;
+
+    private static StoreOrders storeOrders;
+
+    private final ArrayList<Order> storeList;
+    private ArrayList<Order> storeOrdersPlaced;
+
     private static int orderNumber = 0;
 
     /**
      * Constructs a new StoreOrders instance with an initial order.
      */
     public StoreOrders() {
-        this.storeOrders = new ArrayList<>();
+        this.storeList = new ArrayList<>();
+        this.storeOrdersPlaced = new ArrayList<>();
         ArrayList<Pizza> pizzaList = new ArrayList<>();
         Order firstOrder = new Order(0, pizzaList);
-        this.storeOrders.add(firstOrder);
+        this.storeList.add(firstOrder);
     }
 
     /**
@@ -28,7 +34,8 @@ public class StoreOrders {
      * @return The next available order number.
      */
     public int nextAvailableNumber() {
-        return orderNumber;
+        int returnNum = orderNumber;
+        return returnNum;
     }
 
     /**
@@ -37,8 +44,8 @@ public class StoreOrders {
      * @return The index of the order, or -1 if not found.
      */
     public int findIndexOfOrder(Order order) {
-        for (int i = 0; i < this.storeOrders.size(); i++) {
-            if (storeOrders.get(i).getOrderNumber() == order.getOrderNumber()) {
+        for (int i = 0; i < this.storeList.size(); i++) {
+            if (storeList.get(i).getOrderNumber() == order.getOrderNumber()) {
                 return i;
             }
         }
@@ -51,11 +58,20 @@ public class StoreOrders {
      */
     public void addOrder(Order order) {
         int index = findIndexOfOrder(order);
-        this.storeOrders.set(index, order);
+        this.storeList.set(index, order);
+        this.storeOrdersPlaced.add(index, order);
         orderNumber++;
+
         ArrayList<Pizza> pizzaList = new ArrayList<>();
         Order setOrder = new Order(orderNumber, pizzaList);
-        this.storeOrders.add(setOrder);
+        this.storeList.add(setOrder);
+
+    }
+    public static synchronized StoreOrders getStoreOrders() {
+        if (storeOrders == null) {
+            storeOrders = new StoreOrders();
+        }
+        return storeOrders;
     }
 
     /**
@@ -64,12 +80,25 @@ public class StoreOrders {
      */
     public ArrayList<Integer> getOrderNumbers() {
         ArrayList<Integer> num = new ArrayList<>();
-        for (Order storeOrder : this.storeOrders) {
+        for (Order storeOrder : this.storeList) {
             int temp = storeOrder.getOrderNumber();
             num.add(temp);
         }
         return num;
     }
+
+    public ArrayList<Order> storeList() {
+        return this.storeList;
+    }
+
+    /**
+     * Getter method for order placed ArrayList
+     * @return Arraylist<Order>
+     */
+    public ArrayList<Order> getStoreOrdersPlaced() {
+        return this.storeOrdersPlaced;
+    }
+
 
     /**
      * Finds and returns the order with the specified order number.
@@ -77,12 +106,12 @@ public class StoreOrders {
      * @return The order with the specified order number.
      */
     public Order find(int orderNumber) {
-        for (Order storeOrder : this.storeOrders) {
+        for (Order storeOrder : this.storeList) {
             if (storeOrder.getOrderNumber() == orderNumber) {
                 return storeOrder;
             }
         }
-        return storeOrders.get(0);
+        return storeList.get(0);
     }
 
     /**
@@ -90,7 +119,7 @@ public class StoreOrders {
      * @return The total number of orders.
      */
     public int numOrders() {
-        return this.storeOrders.size();
+        return this.storeList.size();
     }
 
     /**
@@ -99,7 +128,7 @@ public class StoreOrders {
      * @return The formatted string representation of the order.
      */
     public String orderToString(int index) {
-        Order order = storeOrders.get(index);
+        Order order = storeList.get(index);
         int orderNumber = order.getOrderNumber();
         double total = order.totalCost();
         double taxRate = 0.06625;
