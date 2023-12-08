@@ -1,6 +1,7 @@
 package com.example.project5_sm;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -113,20 +114,22 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
 
     public void specialtyPizzaButtonOrder(View view) {
 
-        String msg = "Pizza Added to Order!";
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        String message = "Pizza Added to Order!";
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-        StoreOrders storeOrders = StoreOrders.getStoreOrders();
-        ArrayList<Order> orders = storeOrders.storeList();
-        int orderNumber = storeOrders.nextAvailableNumber();
-        Order currentOrder = orders.get(orderNumber);
+        Intent intent = getIntent();
+        mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
+
+        StoreOrders storeOrders = mainMenuController.getStores();
+        int currentOrderNumber = storeOrders.nextAvailableNumber();
+        Order currentOrder = storeOrders.find(currentOrderNumber);
         currentOrder.addPizza(pizza);
+
 
         spinner.setSelection(0);
         cheeseCheckBox.setChecked(false);
         sauceCheckBox.setChecked(false);
 
-        Intent intent = getIntent();
         String pizzaType = intent.getStringExtra("PizzaName");
         pizza = PizzaMaker.createPizza(pizzaType);
         CharSequence priceSeq = getPrice();

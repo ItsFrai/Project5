@@ -14,7 +14,7 @@ public class StoreOrders {
     private static StoreOrders storeOrders;
 
     private final ArrayList<Order> storeList;
-    private ArrayList<Order> storeOrdersPlaced;
+    private final ArrayList<Order> storeOrdersPlaced;
 
     private static int orderNumber = 0;
 
@@ -34,8 +34,7 @@ public class StoreOrders {
      * @return The next available order number.
      */
     public int nextAvailableNumber() {
-        int returnNum = orderNumber;
-        return returnNum;
+        return orderNumber;
     }
 
     /**

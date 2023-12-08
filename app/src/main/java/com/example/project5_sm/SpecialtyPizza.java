@@ -39,8 +39,11 @@ public class SpecialtyPizza extends AppCompatActivity {
         BaconCheeseBurger baconCheeseBurger = new BaconCheeseBurger();
         items.add(new Item(baconCheeseBurger.pizzaType(), R.drawable.baconcheeseburger, baconCheeseBurger.toppings.toString(), baconCheeseBurger.sauce.toString()));
 
+        MainActivity mainMenuController = (MainActivity) getIntent().getSerializableExtra("mainMenuController");
+
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ItemsAdapter(getApplicationContext(), items));
+        recyclerView.setAdapter(new ItemsAdapter(getApplicationContext(), mainMenuController, items));
     }
 }
 

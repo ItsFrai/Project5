@@ -17,9 +17,12 @@ import java.util.ArrayList;
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>{
     private Context context; //need the context to inflate the layout
     private ArrayList<Item> items; //need the data binding to each row of RecyclerView
+    private MainActivity mainMenuController; // Add this field
 
-    public ItemsAdapter(Context context, ArrayList<Item> items) {
+
+    public ItemsAdapter(Context context,MainActivity mainMenuController,ArrayList<Item> items) {
         this.context = context;
+        this.mainMenuController = mainMenuController;
         this.items = items;
     }
 
@@ -82,6 +85,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(itemView.getContext(), selectedItemActivity.class);
+                    intent.putExtra("mainMenuController", mainMenuController);
                     int position = getAdapterPosition();
                     intent.putExtra("Sauce", items.get(position).getSauce());
                     intent.putExtra("PizzaName", items.get(position).getPizzaName());

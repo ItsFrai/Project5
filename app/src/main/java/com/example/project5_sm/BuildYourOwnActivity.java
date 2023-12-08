@@ -185,11 +185,6 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     }
     public void handlePlaceOrder(View view) {
 
-        if (mainMenuController == null) {
-            Log.e("BuildYourOwnActivity", "mainMenuController is null");
-            return;
-        }
-
         ArrayAdapter<String> adapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
 
         if (adapter.getCount() > 2) {
