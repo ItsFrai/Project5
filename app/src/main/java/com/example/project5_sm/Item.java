@@ -1,4 +1,8 @@
 package com.example.project5_sm;
+/**
+ * Represents an item in the pizza menu, encapsulating details such as pizza name, image, toppings, and sauce.
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
 
 public class Item {
     private String pizzaName;
@@ -6,9 +10,6 @@ public class Item {
     private String toppings;
     private String sauce;
     //private String unitPrice; //for demo purpose, the unitPrice is of String type
-
-
-
 
 
     /**

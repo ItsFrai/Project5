@@ -4,6 +4,13 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a Dessert Pizza which extends off Pizza.
+ * It includes specific methods and constants related to Dessert Pizza.
+ *
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
+
 public class Dessert extends Pizza{
     /**
      * Constructs a Dessert pizza with predefined toppings, sauce, and size.

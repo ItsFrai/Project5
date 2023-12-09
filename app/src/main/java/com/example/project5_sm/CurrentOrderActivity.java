@@ -16,6 +16,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * This activity displays the current order details, allowing users to manage and place orders.
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
+
 public class CurrentOrderActivity extends AppCompatActivity {
 
     private MainActivity mainMenuController;
@@ -28,12 +33,15 @@ public class CurrentOrderActivity extends AppCompatActivity {
 
     private int selectedPizzaIndex = -1;
 
+    /**
+     *  Initialize UI components and creates the activity
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currentorder);
 
-        // Initialize UI components
+
         orderNumberTextView = findViewById(R.id.orderNumberTextField);
         currentOrdersListView = findViewById(R.id.currentOrdersListView);
         subtotalTextView = findViewById(R.id.subtotalTextField);
@@ -43,18 +51,27 @@ public class CurrentOrderActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
 
-        // Set up UI
+
+        /**
+         *  Set up UI
+         */
         setOrderNumber();
         initializePizza();
         initializePrice();
     }
 
 
+    /**
+     * Sets the order number in the UI.
+     */
     private void setOrderNumber() {
         String orderNumber = String.valueOf(mainMenuController.getStores().nextAvailableNumber());
         orderNumberTextView.setText(orderNumber);
     }
 
+    /**
+     * Initializes the price-related UI components based on the current order.
+     */
     private void initializePrice() {
         int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
         StoreOrders orders = mainMenuController.getStores();
@@ -73,6 +90,9 @@ public class CurrentOrderActivity extends AppCompatActivity {
         orderTotalTextView.setText(totalString);
     }
 
+    /**
+     * Initializes the list of pizzas in the UI.
+     */
     private void initializePizza() {
         int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
         StoreOrders orders = mainMenuController.getStores();
@@ -83,6 +103,10 @@ public class CurrentOrderActivity extends AppCompatActivity {
         currentOrdersListView.setAdapter(pizzaAdapter);
         currentOrdersListView.setOnItemClickListener((adapterView, view, i, l) -> selectedPizzaIndex = i);
     }
+    /**
+     * Handles the removal of a selected pizza from the current order.
+     * @param view The View object triggering the method (button click).
+     */
     public void handleRemovePizza(View view) {
         int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
         StoreOrders orders = mainMenuController.getStores();
@@ -101,6 +125,10 @@ public class CurrentOrderActivity extends AppCompatActivity {
         initializePizza();
         initializePrice();
     }
+    /**
+     * Handles the placement of the current order.
+     * @param view The View object triggering the method (button click).
+     */
     public void handlePlaceOrder(View view) {
         int currentOrderNum = mainMenuController.getStores().nextAvailableNumber();
         StoreOrders orders = mainMenuController.getStores();
@@ -114,8 +142,13 @@ public class CurrentOrderActivity extends AppCompatActivity {
         orders.addOrder(orders.find(currentOrderNum));
         mainMenuController.get_placed().add(currentOrderNum);
 
+        // Extracted code to initialize pizza list in the UI
         initializePizza();
+
+        // Extracted code to initialize price-related UI components
         initializePrice();
+
+        // Extracted code to set order number in the UI
         setOrderNumber();
         Toast.makeText(this, "Order Placed", Toast.LENGTH_SHORT).show();
     }

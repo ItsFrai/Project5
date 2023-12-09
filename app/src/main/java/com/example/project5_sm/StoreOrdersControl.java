@@ -16,6 +16,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Represents the activity for managing store orders.
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
 public class StoreOrdersControl extends AppCompatActivity {
 
     private StoreOrders sOrder;
@@ -25,6 +29,10 @@ public class StoreOrdersControl extends AppCompatActivity {
     private EditText totalEditText;
     private Spinner orderNumberSpinner;
 
+
+    /**
+     *  Initialize UI components and creates the activity
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +45,7 @@ public class StoreOrdersControl extends AppCompatActivity {
         mainController = new MainActivity().get_control();
         sOrder = mainController.getStores();
 
+        // Check if there are no orders available
         if (sOrder.numOrders() - 1 == 0) {
             showAlert("No Pizza", "Nothing available");
             return;
@@ -61,6 +70,9 @@ public class StoreOrdersControl extends AppCompatActivity {
         });
     }
 
+    /**
+     * Calculates and sets the total price based on the selected order.
+     */
     private void setPrice() {
         int orderNum = (int) orderNumberSpinner.getSelectedItem();
         double taxes = 0.06625;
@@ -70,6 +82,9 @@ public class StoreOrdersControl extends AppCompatActivity {
         totalEditText.setText(totalString);
     }
 
+    /**
+     * Displays the list of pizzas for the selected order and updates the total price.
+     */
     private void showPizza() {
         if (orderNumberSpinner.getSelectedItem() == null) {
             totalEditText.setText("");
@@ -85,16 +100,28 @@ public class StoreOrdersControl extends AppCompatActivity {
         setPrice();
     }
 
+    /**
+     * Called when the activity is resumed. Invoked after the activity has been paused.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         setMainMenuController(mainController);
     }
 
+    /**
+     * Sets the main controller
+     */
     private void setMainMenuController(MainActivity controller) {
         mainController = controller;
     }
 
+    /**
+     * Shows an alert dialog with the specified title and content.
+     *
+     * @param title   the title of the alert.
+     * @param content the content of the alert.
+     */
     private void showAlert(String title, String content) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title)
@@ -103,6 +130,11 @@ public class StoreOrdersControl extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Handles the click event to cancel an order.
+     *
+     * @param view the view that was clicked.
+     */
     public void cancelOrder(View view) {
         if (orderNumberSpinner.getSelectedItem() == null) {
             showAlert("Null", "Nothing selected");
@@ -137,6 +169,13 @@ public class StoreOrdersControl extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if a given list contains a specific order number.
+     *
+     * @param list        the list to check.
+     * @param orderNumber the order number to look for.
+     * @return true if the list contains the order number, false otherwise.
+     */
     private boolean contains(ArrayList<Integer> list, int orderNumber) {
         for (Integer integer : list) {
             if (Objects.equals(integer, orderNumber)) {
@@ -145,6 +184,12 @@ public class StoreOrdersControl extends AppCompatActivity {
         }
         return false;
     }
+
+    /**
+     * Removes a specific order number from the list of placed orders.
+     *
+     * @param orderNumber the order number to remove.
+     */
     private void removeOrder(int orderNumber) {
         ArrayList<Integer> ordersPlaced = mainController.get_control().get_placed();
         ordersPlaced.removeIf(i -> i.equals(orderNumber));

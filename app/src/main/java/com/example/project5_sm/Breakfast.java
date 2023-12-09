@@ -3,6 +3,12 @@ package com.example.project5_sm;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+/**
+ * This class represents a Breakfast Pizza which extends off Pizza.
+ * It includes specific methods and constants related to Breakfast Pizza.
+ *
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
 
 public class Breakfast extends Pizza{
     /**

@@ -3,10 +3,16 @@ package com.example.project5_sm;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+/**
+ * This class represents a BaconCheeseBurger Pizza which extends off Pizza.
+ * It includes specific methods and constants related to Breakfast Pizza.
+ *
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
 
 public class BaconCheeseBurger extends Pizza{
     /**
-     * Constructs a Veggie pizza with predefined toppings, sauce, and size.
+     * Constructs a BaconCheeseBurger pizza with predefined toppings, sauce, and size.
      */
     public BaconCheeseBurger(){
         ArrayList<String> toppings = new ArrayList<>();

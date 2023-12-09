@@ -11,5 +11,5 @@ public enum Sauce {
         ALFREDO,
 
         NUTELLA,
-        VODKA
+
 }

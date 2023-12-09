@@ -10,6 +10,11 @@ import android.os.Bundle;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+
+/**
+ * Represents the activity for viewing and customizing a selected pizza item.
+ * @ Fraidoon Pourooshasb, Samman Pandey
+ */
 public class selectedItemActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private MainActivity mainMenuController;
@@ -20,6 +25,9 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
     private CheckBox cheeseCheckBox, sauceCheckBox;
     private Pizza pizza;
 
+    /**
+     *  Initialize UI components and creates the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +60,25 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         price.setText(priceSeq);
     }
 
+
+    /**
+     * Formats a double value to a string with two decimal places.
+     *
+     * @param price the price to format.
+     * @return the formatted price string.
+     */
     private String formatDouble(Double price) {
         DecimalFormat format = new DecimalFormat("#.##");
         price = Double.parseDouble(format.format(price));
         return String.valueOf(price);
     }
 
+
+    /**
+     * Retrieves the formatted price string based on the selected options.
+     *
+     * @return the formatted price string.
+     */
     private String getPrice() {
         price = findViewById(R.id.price);
         cheeseCheckBox = findViewById(R.id.cheeseCheckBox);
@@ -69,6 +90,12 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         return "Price: $" + priceString;
     }
 
+    /**
+     *  Get the selected item from the spinner
+     *  Display a toast with the selected item
+     *  Update the displayed price
+     *
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String size = spinner.getSelectedItem().toString(); //get the selected item
@@ -86,10 +113,20 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         price.setText(getPrice());
 
     }
+    /**
+     *  If nothing is selected, then nothing will happen
+     *
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+
+    /**
+     * Handles the click event for the extra sauce checkbox.
+     *
+     * @param view the view that was clicked.
+     */
     public void extraSauceClick(View view) {
         if (sauceCheckBox.isChecked()) {
             pizza.extraSauce = true;
@@ -101,6 +138,11 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         price.setText(getPrice());
     }
 
+    /**
+     * Handles the click event for the extra cheese checkbox.
+     *
+     * @param view the view that was clicked.
+     */
     public void extraCheeseClick(View view) {
         if (cheeseCheckBox.isChecked()) {
             pizza.extraCheese = true;
@@ -112,6 +154,18 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         price.setText(getPrice());
     }
 
+
+    /**
+     * Handles the click event for the "Order" button.
+     *
+     * Displays a toast indicating that the pizza has been added to the order.
+     * Updates the current order with the selected pizza.
+     * Resets spinner and checkboxes to their initial state.
+     * Creates a new pizza for customization.
+     * Updates the displayed price.
+     *
+     * @param view the view that was clicked.
+     */
     public void specialtyPizzaButtonOrder(View view) {
 
         String message = "Pizza Added to Order!";

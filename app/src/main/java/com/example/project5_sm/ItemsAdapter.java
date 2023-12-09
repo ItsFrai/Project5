@@ -13,13 +13,24 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-
+/**
+ * Adapter class for managing the display of items in a RecyclerView.
+ * It binds the data to the layout and handles item click events.
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>{
     private Context context; //need the context to inflate the layout
     private ArrayList<Item> items; //need the data binding to each row of RecyclerView
     private MainActivity mainMenuController; // Add this field
 
 
+    /**
+     * Constructs an ItemsAdapter.
+     *
+     * @param context            The context to inflate the layout.
+     * @param mainMenuController The main menu controller.
+     * @param items              The list of items to display.
+     */
     public ItemsAdapter(Context context,MainActivity mainMenuController,ArrayList<Item> items) {
         this.context = context;
         this.mainMenuController = mainMenuController;
@@ -27,10 +38,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
     }
 
     /**
-     * This method will inflate the row layout for the items in the RecyclerView
-     * @param parent
-     * @param viewType
-     * @return
+     * Inflates the row layout for the items in the RecyclerView.
+     *
+     * @param parent   The ViewGroup into which the new View will be added.
+     * @param viewType The type of the new View.
+     * @return A new ItemsHolder instance.
      */
     @NonNull
     @Override
@@ -43,10 +55,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
     }
 
     /**
-     * Assign data values for each row according to their "position" (index) when the item becomes
-     * visible on the screen.
-     * @param holder the instance of ItemsHolder
-     * @param position the index of the item in the list of items
+     * Assigns data values for each row according to their position when the item becomes visible on the screen.
+     *
+     * @param holder   The instance of ItemsHolder.
+     * @param position The index of the item in the list of items.
      */
     @Override
     public void onBindViewHolder(@NonNull ItemsHolder holder, int position) {
@@ -67,13 +79,19 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
     }
 
     /**
-     * Get the views from the row layout file, similar to the onCreate() method.
+     * Represents a ViewHolder for items in the RecyclerView.
+     * It holds references to the views in the row layout.
      */
     public class ItemsHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private TextView pizzaName, toppings, sauce;
         private RelativeLayout parentLayout; //this is the row layout
 
+        /**
+         * Constructor for ItemsHolder.
+         *
+         * @param itemView The root view of the item layout.
+         */
         public ItemsHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
@@ -81,17 +99,26 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
             toppings = itemView.findViewById(R.id.toppings);
             sauce = itemView.findViewById(R.id.sauce);
             parentLayout = itemView.findViewById(R.id.rowView);
+
+            // Set up click listener for the item
             parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    // Create an intent to navigate to the selectedItemActivity
                     Intent intent = new Intent(itemView.getContext(), selectedItemActivity.class);
+
+                    // Pass necessary data to the intent
                     intent.putExtra("mainMenuController", mainMenuController);
                     int position = getAdapterPosition();
                     intent.putExtra("Sauce", items.get(position).getSauce());
                     intent.putExtra("PizzaName", items.get(position).getPizzaName());
                     intent.putExtra("Toppings", items.get(position).getToppings());
                     intent.putExtra("Image", items.get(position).getImage());
+
+                    // Add flag to start a new activity from outside an activity context
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    // Start the activity
                     context.startActivity(intent);
                 }
             });

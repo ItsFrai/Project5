@@ -4,6 +4,12 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a Hawaiian Pizza which extends off Pizza.
+ * It includes specific methods and constants related to Hawaiian Pizza.
+ *
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
 public class Hawaiian extends Pizza {
     /**
      * Constructs a Hawaiian pizza with predefined toppings, sauce, and size.

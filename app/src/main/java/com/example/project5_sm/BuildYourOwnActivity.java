@@ -18,8 +18,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity allows users to build their own pizza with customizable options.
+ * It includes features like selecting size, toppings, and additional choices.
+ * @author Fraidoon Pourooshasb, Samman Pandey
+ */
 public class BuildYourOwnActivity extends AppCompatActivity {
 
+    /**
+     * Controller for the main menu
+     */
     private MainActivity mainMenuController;
     private Spinner sizeDropdown;
     private ListView additionalToppingsListView;
@@ -28,14 +36,19 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     private CheckBox extraCheeseCheckbox;
     private EditText amountTextField;
 
+    /**
+     * Initializes the UI elements and sets up listeners for user interactions.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buildyourown);
 
+        // Get the main menu controller from the intent
         Intent intent = getIntent();
         mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
 
+        // Initialize UI elements
         sizeDropdown = findViewById(R.id.sizeDropdown);
         extraSauceCheckbox = findViewById(R.id.extraSauceCheckbox);
         extraCheeseCheckbox = findViewById(R.id.extraCheeseCheckbox);
@@ -44,17 +57,34 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         amountTextField = findViewById(R.id.amountTextField);
 
 
+        // Button for adding pizza to the order
         Button addToOrderButton = findViewById(R.id.addToOrderButton);
         addToOrderButton.setOnClickListener(this::handlePlaceOrder);
 
         initialize();
 
         sizeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+           //setting up listeners
+
+            /**
+             * Listener for item selection in the sizeDropdown.
+             *
+             * @param parentView       The AdapterView where the selection happened.
+             * @param selectedItemView The view within the AdapterView that was clicked.
+             * @param position         The position of the view in the adapter.
+             * @param id               The row id of the item that is selected.
+             */
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 updatePizzaPrice();
             }
 
+
+            /**
+             * Callback method to be invoked when the selection disappears from this view.
+             *
+             * @param parentView The AdapterView that now contains no selected item.
+             */
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // Do nothing here
@@ -70,6 +100,10 @@ public class BuildYourOwnActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Initializes dropdowns and list views with default values.
+     */
     private void initialize() {
 
         List<String> sizeOptions = new ArrayList<>();
@@ -107,6 +141,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Updates the displayed pizza price based on selected options.
+     */
     private void updatePizzaPrice() {
         ArrayAdapter<String> selectedToppingsAdapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
 
@@ -124,6 +161,13 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the transfer of toppings between list views.
+     *
+     * @param sourceListView      The source ListView.
+     * @param destinationListView The destination ListView.
+     * @param position            The position of the selected item.
+     */
     private void handleTransferTopping(ListView sourceListView, ListView destinationListView, int position) {
         ArrayAdapter<String> sourceAdapter = (ArrayAdapter<String>) sourceListView.getAdapter();
         ArrayAdapter<String> destinationAdapter = (ArrayAdapter<String>) destinationListView.getAdapter();
@@ -132,6 +176,12 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         sourceAdapter.remove(selectedTopping);
         updatePizzaPrice();
     }
+
+    /**
+     * Calculates the cost of the selected pizza size.
+     *
+     * @return The calculated size cost.
+     */
     private double calculateSizeCost() {
         if (sizeDropdown.getSelectedItem() != null) {
             String selectedSize = sizeDropdown.getSelectedItem().toString();
@@ -147,6 +197,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         return 0;
     }
 
+    /**
+     * Resets the UI components to their default state.
+     */
     private void reset() {
         sizeDropdown.setSelection(0);
         extraCheeseCheckbox.setChecked(false);
@@ -176,6 +229,12 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         ArrayAdapter<String> toppingsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, defaultToppings);
         additionalToppingsListView.setAdapter(toppingsAdapter);
     }
+
+    /**
+     * Clears the items from a ListView.
+     *
+     * @param listView The ListView to be cleared.
+     */
     private void clearListView(ListView listView) {
         ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
         if (adapter != null) {
@@ -183,6 +242,12 @@ public class BuildYourOwnActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         }
     }
+
+    /**
+     * Handles the placement of the customized pizza order.
+     *
+     * @param view The View object triggering the method (button click).
+     */
     public void handlePlaceOrder(View view) {
 
         ArrayAdapter<String> adapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
