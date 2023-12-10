@@ -45,7 +45,6 @@ public class StoreOrdersControl extends AppCompatActivity {
         mainController = new MainActivity().get_control();
         sOrder = mainController.getStores();
 
-        // Check if there are no orders available
         if (sOrder.numOrders() - 1 == 0) {
             showAlert("No Pizza", "Nothing available");
             return;

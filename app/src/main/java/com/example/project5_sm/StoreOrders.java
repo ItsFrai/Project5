@@ -1,6 +1,5 @@
 package com.example.project5_sm;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -9,9 +8,6 @@ import java.util.ArrayList;
  * @author Fraidoon Pourooshasb, Samman Pandey
  */
 public class StoreOrders {
-
-
-    private static StoreOrders storeOrders;
 
     private final ArrayList<Order> storeList;
     private final ArrayList<Order> storeOrdersPlaced;
@@ -66,12 +62,6 @@ public class StoreOrders {
         this.storeList.add(setOrder);
 
     }
-    public static synchronized StoreOrders getStoreOrders() {
-        if (storeOrders == null) {
-            storeOrders = new StoreOrders();
-        }
-        return storeOrders;
-    }
 
     /**
      * Gets a list of order numbers.
@@ -85,19 +75,6 @@ public class StoreOrders {
         }
         return num;
     }
-
-    public ArrayList<Order> storeList() {
-        return this.storeList;
-    }
-
-    /**
-     * Getter method for order placed ArrayList
-     * @return Arraylist<Order>
-     */
-    public ArrayList<Order> getStoreOrdersPlaced() {
-        return this.storeOrdersPlaced;
-    }
-
 
     /**
      * Finds and returns the order with the specified order number.
@@ -121,32 +98,4 @@ public class StoreOrders {
         return this.storeList.size();
     }
 
-    /**
-     * Converts an order to a formatted string.
-     * @param index The index of the order.
-     * @return The formatted string representation of the order.
-     */
-    public String orderToString(int index) {
-        Order order = storeList.get(index);
-        int orderNumber = order.getOrderNumber();
-        double total = order.totalCost();
-        double taxRate = 0.06625;
-        total = (total * taxRate) + total;
-
-        StringBuilder resultString = new StringBuilder("Order Number " + orderNumber);
-        ArrayList<String> strings = order.getPizzaStrings();
-
-        if (strings.isEmpty()) {
-            return "";
-        }
-
-        for (String pizzaD : strings) {
-            resultString.append("\n").append(pizzaD);
-        }
-
-        String formattedTotal = new DecimalFormat("#,##0.00").format(total);
-        resultString.append("\nTotal Price: $").append(formattedTotal);
-
-        return resultString.toString();
-    }
 }

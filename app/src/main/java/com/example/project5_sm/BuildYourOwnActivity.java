@@ -2,7 +2,6 @@ package com.example.project5_sm;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,11 +43,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buildyourown);
 
-        // Get the main menu controller from the intent
         Intent intent = getIntent();
         mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
 
-        // Initialize UI elements
         sizeDropdown = findViewById(R.id.sizeDropdown);
         extraSauceCheckbox = findViewById(R.id.extraSauceCheckbox);
         extraCheeseCheckbox = findViewById(R.id.extraCheeseCheckbox);
@@ -57,15 +54,12 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         amountTextField = findViewById(R.id.amountTextField);
 
 
-        // Button for adding pizza to the order
         Button addToOrderButton = findViewById(R.id.addToOrderButton);
         addToOrderButton.setOnClickListener(this::handlePlaceOrder);
 
         initialize();
 
         sizeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-           //setting up listeners
-
             /**
              * Listener for item selection in the sizeDropdown.
              *
@@ -87,7 +81,6 @@ public class BuildYourOwnActivity extends AppCompatActivity {
              */
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Do nothing here
             }
         });
         additionalToppingsListView.setOnItemClickListener((parent, view, position, id) -> handleTransferTopping(additionalToppingsListView, selectedToppingsListView, position));
@@ -147,7 +140,6 @@ public class BuildYourOwnActivity extends AppCompatActivity {
     private void updatePizzaPrice() {
         ArrayAdapter<String> selectedToppingsAdapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
 
-        // Check if the adapter is not null
         if (selectedToppingsAdapter != null) {
             int selectedToppingsCount = selectedToppingsAdapter.getCount();
 
@@ -206,11 +198,9 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         extraSauceCheckbox.setChecked(false);
         amountTextField.setText(null);
 
-        // Clear toppings lists
         clearListView(selectedToppingsListView);
         clearListView(additionalToppingsListView);
 
-        // Set default additional toppings
         List<String> defaultToppings = new ArrayList<>();
         defaultToppings.add("Sausage");
         defaultToppings.add("Chicken");
@@ -252,7 +242,7 @@ public class BuildYourOwnActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = (ArrayAdapter<String>) selectedToppingsListView.getAdapter();
 
-        if (adapter.getCount() > 2) {
+        if (adapter.getCount() > 2 && adapter.getCount() < 8) {
 
         Pizza pizza = PizzaMaker.createPizza("Build Your Own");
         pizza.size = Size.valueOf(sizeDropdown.getSelectedItem().toString());
@@ -274,8 +264,11 @@ public class BuildYourOwnActivity extends AppCompatActivity {
         Toast.makeText(this, "Order Placed!", Toast.LENGTH_SHORT).show();
 
         reset();
-    } else {
+    } else if (adapter.getCount() < 3){
             Toast.makeText(this, "Not Enough Toppings!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(this, "Too many toppings!", Toast.LENGTH_SHORT).show();
         }
     }
 }

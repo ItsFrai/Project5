@@ -1,15 +1,12 @@
 package com.example.project5_sm;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -19,9 +16,9 @@ import java.util.ArrayList;
  * @author Fraidoon Pourooshasb, Samman Pandey
  */
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>{
-    private Context context; //need the context to inflate the layout
-    private ArrayList<Item> items; //need the data binding to each row of RecyclerView
-    private MainActivity mainMenuController; // Add this field
+    private final Context context;
+    private final ArrayList<Item> items;
+    private final MainActivity mainMenuController;
 
 
     /**
@@ -47,7 +44,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
     @NonNull
     @Override
     public ItemsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //inflate the row layout for the items
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycleviewer, parent, false);
 
@@ -62,7 +58,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
      */
     @Override
     public void onBindViewHolder(@NonNull ItemsHolder holder, int position) {
-        //assign values for each row
         holder.pizzaName.setText(items.get(position).getPizzaName());
         holder.toppings.setText(items.get(position).getToppings());
         holder.sauce.setText(items.get(position).getSauce());
@@ -75,7 +70,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
      */
     @Override
     public int getItemCount() {
-        return items.size(); //number of MenuItem in the array list.
+        return items.size();
     }
 
     /**
@@ -83,9 +78,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
      * It holds references to the views in the row layout.
      */
     public class ItemsHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
-        private TextView pizzaName, toppings, sauce;
-        private RelativeLayout parentLayout; //this is the row layout
+        private final ImageView imageView;
+        private final TextView pizzaName;
+        private final TextView toppings;
+        private final TextView sauce;
 
         /**
          * Constructor for ItemsHolder.
@@ -98,29 +94,23 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
             pizzaName = itemView.findViewById(R.id.pizzaName);
             toppings = itemView.findViewById(R.id.toppings);
             sauce = itemView.findViewById(R.id.sauce);
-            parentLayout = itemView.findViewById(R.id.rowView);
+            RelativeLayout parentLayout = itemView.findViewById(R.id.rowView);
 
-            // Set up click listener for the item
-            parentLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Create an intent to navigate to the selectedItemActivity
-                    Intent intent = new Intent(itemView.getContext(), selectedItemActivity.class);
 
-                    // Pass necessary data to the intent
-                    intent.putExtra("mainMenuController", mainMenuController);
-                    int position = getAdapterPosition();
-                    intent.putExtra("Sauce", items.get(position).getSauce());
-                    intent.putExtra("PizzaName", items.get(position).getPizzaName());
-                    intent.putExtra("Toppings", items.get(position).getToppings());
-                    intent.putExtra("Image", items.get(position).getImage());
+            parentLayout.setOnClickListener(view -> {
 
-                    // Add flag to start a new activity from outside an activity context
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(itemView.getContext(), selectedItemActivity.class);
 
-                    // Start the activity
-                    context.startActivity(intent);
-                }
+
+                intent.putExtra("mainMenuController", mainMenuController);
+                int position = getAdapterPosition();
+                intent.putExtra("Sauce", items.get(position).getSauce());
+                intent.putExtra("PizzaName", items.get(position).getPizzaName());
+                intent.putExtra("Toppings", items.get(position).getToppings());
+                intent.putExtra("Image", items.get(position).getImage());
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             });
         }
     }

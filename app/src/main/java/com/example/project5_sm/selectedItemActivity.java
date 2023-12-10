@@ -1,14 +1,12 @@
 package com.example.project5_sm;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.app.AlertDialog;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 
 /**
@@ -18,10 +16,8 @@ import java.util.ArrayList;
 public class selectedItemActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private MainActivity mainMenuController;
-    private TextView pizzaName, sauce, toppings, price;
-    private ImageView image;
+    private TextView price;
     private Spinner spinner;
-    private ArrayAdapter<String> adapter;
     private CheckBox cheeseCheckBox, sauceCheckBox;
     private Pizza pizza;
 
@@ -32,10 +28,10 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_item);
-        pizzaName = findViewById(R.id.pizzaNameSelected);;
-        toppings = findViewById(R.id.toppingsSelected);
-        sauce = findViewById(R.id.sauceSelected);
-        image = findViewById(R.id.imageViewSelected);
+        TextView pizzaName = findViewById(R.id.pizzaSelected);
+        TextView toppings = findViewById(R.id.toppingsSelected);
+        TextView sauce = findViewById(R.id.sauceSelected);
+        ImageView image = findViewById(R.id.imageSelected);
         Intent intent = getIntent();
         mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
         pizzaName.setText(intent.getStringExtra("PizzaName"));
@@ -43,17 +39,15 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
         sauce.setText(intent.getStringExtra("Sauce"));
         image.setImageResource(intent.getIntExtra("Image", 0));
 
-        // Set size spinner
         spinner = findViewById(R.id.specialtySize);
-        String[] size = {"Small", "Medium", "Large"}; //could be a list from the backend
-        adapter = new ArrayAdapter<>(
+        String[] size = {"Small", "Medium", "Large"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, size);
 
 
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this); //add the listener
+        spinner.setOnItemSelectedListener(this);
 
-        // Set initial price
         String pizzaType = intent.getStringExtra("PizzaName");
         pizza = PizzaMaker.createPizza(pizzaType);
         CharSequence priceSeq = getPrice();
@@ -98,8 +92,8 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String size = spinner.getSelectedItem().toString(); //get the selected item
-        Toast.makeText(this, size, Toast.LENGTH_SHORT).show(); //do something about the selected item
+        String size = spinner.getSelectedItem().toString();
+        Toast.makeText(this, size, Toast.LENGTH_SHORT).show();
 
         if (size.equals("Small")) {
             pizza.size = Size.Small;
@@ -127,13 +121,8 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
      *
      * @param view the view that was clicked.
      */
-    public void extraSauceClick(View view) {
-        if (sauceCheckBox.isChecked()) {
-            pizza.extraSauce = true;
-        }
-        else {
-            pizza.extraSauce = false;
-        }
+    public void extraSauce(View view) {
+        pizza.extraSauce = sauceCheckBox.isChecked();
 
         price.setText(getPrice());
     }
@@ -143,13 +132,8 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
      *
      * @param view the view that was clicked.
      */
-    public void extraCheeseClick(View view) {
-        if (cheeseCheckBox.isChecked()) {
-            pizza.extraCheese = true;
-        }
-        else {
-            pizza.extraCheese = false;
-        }
+    public void extraCheese(View view) {
+        pizza.extraCheese = cheeseCheckBox.isChecked();
 
         price.setText(getPrice());
     }
@@ -157,7 +141,6 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
 
     /**
      * Handles the click event for the "Order" button.
-     *
      * Displays a toast indicating that the pizza has been added to the order.
      * Updates the current order with the selected pizza.
      * Resets spinner and checkboxes to their initial state.
@@ -166,28 +149,39 @@ public class selectedItemActivity extends AppCompatActivity implements AdapterVi
      *
      * @param view the view that was clicked.
      */
-    public void specialtyPizzaButtonOrder(View view) {
+    public void specialtyButton(View view) {
 
-        String message = "Pizza Added to Order!";
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation");
+        builder.setMessage("Do you want to add this pizza to your order?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            String message = "Pizza Added to Order!";
+            Toast.makeText(selectedItemActivity.this, message, Toast.LENGTH_SHORT).show();
 
-        Intent intent = getIntent();
-        mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
+            Intent intent = getIntent();
+            mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
 
-        StoreOrders storeOrders = mainMenuController.getStores();
-        int currentOrderNumber = storeOrders.nextAvailableNumber();
-        Order currentOrder = storeOrders.find(currentOrderNumber);
-        currentOrder.addPizza(pizza);
+            StoreOrders storeOrders = mainMenuController.getStores();
+            int currentOrderNumber = storeOrders.nextAvailableNumber();
+            Order currentOrder = storeOrders.find(currentOrderNumber);
+            currentOrder.addPizza(pizza);
 
+            reset();
+
+            String pizzaType = intent.getStringExtra("PizzaName");
+            pizza = PizzaMaker.createPizza(pizzaType);
+            CharSequence priceSeq = getPrice();
+            price.setText(priceSeq);
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+        });
+        builder.show();
+    }
+
+    public void reset() {
 
         spinner.setSelection(0);
         cheeseCheckBox.setChecked(false);
         sauceCheckBox.setChecked(false);
-
-        String pizzaType = intent.getStringExtra("PizzaName");
-        pizza = PizzaMaker.createPizza(pizzaType);
-        CharSequence priceSeq = getPrice();
-        price.setText(priceSeq);
-
     }
 }

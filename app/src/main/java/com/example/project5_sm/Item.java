@@ -5,11 +5,10 @@ package com.example.project5_sm;
  */
 
 public class Item {
-    private String pizzaName;
-    private int image;
-    private String toppings;
-    private String sauce;
-    //private String unitPrice; //for demo purpose, the unitPrice is of String type
+    private final String pizzaName;
+    private final int image;
+    private final String toppings;
+    private final String sauce;
 
 
     /**

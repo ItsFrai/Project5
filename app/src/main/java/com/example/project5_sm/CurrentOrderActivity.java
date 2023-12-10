@@ -3,7 +3,6 @@ package com.example.project5_sm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * This activity displays the current order details, allowing users to manage and place orders.
@@ -51,10 +49,6 @@ public class CurrentOrderActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mainMenuController = (MainActivity) intent.getSerializableExtra("mainMenuController");
 
-
-        /**
-         *  Set up UI
-         */
         setOrderNumber();
         initializePizza();
         initializePrice();
@@ -142,13 +136,8 @@ public class CurrentOrderActivity extends AppCompatActivity {
         orders.addOrder(orders.find(currentOrderNum));
         mainMenuController.get_placed().add(currentOrderNum);
 
-        // Extracted code to initialize pizza list in the UI
         initializePizza();
-
-        // Extracted code to initialize price-related UI components
         initializePrice();
-
-        // Extracted code to set order number in the UI
         setOrderNumber();
         Toast.makeText(this, "Order Placed", Toast.LENGTH_SHORT).show();
     }
